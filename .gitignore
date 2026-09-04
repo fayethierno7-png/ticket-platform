@@ -1,0 +1,10 @@
+target/
+node_modules/
+.m2/
+.tools/
+.vercel/
+.DS_Store
+supabase/.temp/
+.idea/
+*.iml
+.env

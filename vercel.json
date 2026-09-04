@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/frontend/index.html" },
+    { "source": "/:page(index|achat|ticket|admin|verification).html", "destination": "/frontend/:page.html" },
+    { "source": "/css/:path*", "destination": "/frontend/css/:path*" },
+    { "source": "/js/:path*", "destination": "/frontend/js/:path*" },
+    { "source": "/images/:path*", "destination": "/frontend/images/:path*" }
+  ]
+}

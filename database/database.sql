@@ -1,0 +1,12 @@
+CREATE DATABASE IF NOT EXISTS ticket_platform CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE ticket_platform;
+
+CREATE TABLE users (id BIGINT AUTO_INCREMENT PRIMARY KEY, full_name VARCHAR(120) NOT NULL, email VARCHAR(190) NOT NULL UNIQUE, phone VARCHAR(30), password_hash VARCHAR(255) NOT NULL, role VARCHAR(20) NOT NULL DEFAULT 'CUSTOMER', created_at DATETIME NOT NULL, INDEX idx_users_role(role));
+CREATE TABLE ticket_types (id BIGINT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(80) NOT NULL UNIQUE, price DECIMAL(12,2) NOT NULL, description VARCHAR(255), active BOOLEAN NOT NULL DEFAULT TRUE);
+CREATE TABLE payments (id BIGINT AUTO_INCREMENT PRIMARY KEY, customer_id BIGINT NOT NULL, amount DECIMAL(12,2) NOT NULL, status VARCHAR(30) NOT NULL, reference VARCHAR(80) NOT NULL UNIQUE, paid_at DATETIME NOT NULL, CONSTRAINT fk_payment_customer FOREIGN KEY(customer_id) REFERENCES users(id), INDEX idx_payment_paid_at(paid_at));
+CREATE TABLE tickets (id BIGINT AUTO_INCREMENT PRIMARY KEY, code VARCHAR(48) NOT NULL UNIQUE, qr_token VARCHAR(80) NOT NULL UNIQUE, customer_id BIGINT NOT NULL, ticket_type_id BIGINT NOT NULL, payment_id BIGINT NOT NULL, price DECIMAL(12,2) NOT NULL, status VARCHAR(16) NOT NULL, purchased_at DATETIME NOT NULL, expires_at DATETIME NOT NULL, CONSTRAINT fk_ticket_customer FOREIGN KEY(customer_id) REFERENCES users(id), CONSTRAINT fk_ticket_type FOREIGN KEY(ticket_type_id) REFERENCES ticket_types(id), CONSTRAINT fk_ticket_payment FOREIGN KEY(payment_id) REFERENCES payments(id), INDEX idx_ticket_code(code), INDEX idx_ticket_status(status), INDEX idx_ticket_expiry(expires_at));
+CREATE TABLE ticket_scans (id BIGINT AUTO_INCREMENT PRIMARY KEY, ticket_id BIGINT NOT NULL, scanned_by_id BIGINT NULL, scanned_at DATETIME NOT NULL, result VARCHAR(30) NOT NULL, CONSTRAINT fk_scan_ticket FOREIGN KEY(ticket_id) REFERENCES tickets(id), CONSTRAINT fk_scan_user FOREIGN KEY(scanned_by_id) REFERENCES users(id), INDEX idx_scan_ticket(ticket_id));
+
+INSERT INTO ticket_types(name,price,description,active) VALUES ('Standard',5000.00,'Accès à l’événement',TRUE),('VIP',15000.00,'Accès prioritaire et espace VIP',TRUE);
+-- Mot de passe initial: Admin2026!  (à changer avant production)
+INSERT INTO users(full_name,email,phone,password_hash,role,created_at) VALUES ('Administrateur','admin@tickets.local','', '$2a$10$MnHSORw8EXo7tGx6egm7L.ONHDOARbo60dNEaB73XlZ5NxLaAtPLa','ADMIN',NOW());

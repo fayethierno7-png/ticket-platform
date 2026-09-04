@@ -1,0 +1,17 @@
+{
+  "name": "ticket-platform-serverless",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npx vercel dev"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0"
+  },
+  "devDependencies": {
+    "vercel": "^59.11.2"
+  }
+}
