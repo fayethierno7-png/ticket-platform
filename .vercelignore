@@ -1,0 +1,8 @@
+node_modules
+backend/target
+.m2
+.tools
+.git
+portfolio.zip
+.DS_Store
+supabase/.temp
