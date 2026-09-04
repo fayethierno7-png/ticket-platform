@@ -8,3 +8,4 @@ supabase/.temp/
 .idea/
 *.iml
 .env
+.vercel
